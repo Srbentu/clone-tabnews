@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from '@vercel/speed-insights/react';
+import { useRouter } from 'next/router';
 
 export default function FunnyGifApp() {
+  const router = useRouter();
   const [gifUrl, setGifUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -29,6 +31,7 @@ export default function FunnyGifApp() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      
       <h1 className="text-2xl font-bold mb-4">Gerador de GIFs Engraçados</h1>
       
       <button 
@@ -48,7 +51,7 @@ export default function FunnyGifApp() {
           />
         </div>
       )}
-      <SpeedInsights />
+      <SpeedInsights route={router.pathname} />
     </div>
   );
 } 
