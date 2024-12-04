@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export default function FunnyGifApp() {
   const [gifUrl, setGifUrl] = useState<string | null>(null);
@@ -47,6 +48,7 @@ export default function FunnyGifApp() {
           />
         </div>
       )}
+      <SpeedInsights />
     </div>
   );
-}
+} 
