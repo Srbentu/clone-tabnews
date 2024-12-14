@@ -6,6 +6,6 @@ export default async function statusApi(
   response: NextApiResponse,
 ) {
   const result = await database.query("SELECT 1 + 1 as sum;");
-  console.log(result);
+  console.log(result.rows);
   response.status(200).json({ status: "ok" });
 }
