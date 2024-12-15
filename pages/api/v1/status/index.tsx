@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import database from "../../../../infra/database";
+import database from "infra/database";
 
 export default async function statusApi(
   request: NextApiRequest,
