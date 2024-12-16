@@ -5,7 +5,11 @@ export default async function statusApi(
   request: NextApiRequest,
   response: NextApiResponse,
 ) {
-  const result = await database.query("SELECT 1 + 1 as sum;");
-  console.log(result.rows);
-  response.status(200).json({ status: "ok" });
+  const updatedAt = new Date().toISOString()
+  response.status(200).json({ 
+    updated_at: updatedAt,
+    postgress_version: 200,
+    maxmimum_conections:3,
+    used_conections:2,
+   });
 }
