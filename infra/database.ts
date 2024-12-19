@@ -13,7 +13,10 @@ async function query(queryObject: string | QueryConfig): Promise<QueryResult> {
     await client.connect();
     const result = await client.query(queryObject);
     return result;
-  } finally {
+  } catch(error) {
+    console.log(error)
+    throw error
+  }finally {
     await client.end();
   }
 }
