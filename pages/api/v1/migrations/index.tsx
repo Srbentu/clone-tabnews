@@ -11,15 +11,30 @@ export default async function migrationsApi(
   if (!databaseUrl) {
     return response.status(500).json({ error: "DATABASE_URL não está definida" });
   }
-
-  const migrations = await migrationRunner({
-    databaseUrl,
-    dryRun: true,
-    dir: join("infra", "migrations"),
-    direction: "up",
-    verbose: true,
-    migrationsTable:"pgmigrations"
-  });
-
-  response.status(200).json(migrations);
+  console.log(request.method)
+  if(request.method === "GET"){
+    const migrations = await migrationRunner({
+      databaseUrl,
+      dryRun: true,
+      dir: join("infra", "migrations"),
+      direction: "up",
+      verbose: true,
+      migrationsTable:"pgmigrations"
+    });
+  
+    response.status(200).json(migrations);
+  }
+  if(request.method === "POST"){
+    const migrations = await migrationRunner({
+      databaseUrl,
+      dryRun: false,
+      dir: join("infra", "migrations"),
+      direction: "up",
+      verbose: true,
+      migrationsTable:"pgmigrations"
+    });
+  
+    response.status(200).json(migrations);
+  }
+  return response.status(405).end()
 }
