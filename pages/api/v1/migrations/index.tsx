@@ -2,6 +2,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import migrationRunner from 'node-pg-migrate';
 import { join } from "node:path";
 
+type MigrationDirection = 'up' | 'down';
+
 export default async function migrationsApi(
   request: NextApiRequest,
   response: NextApiResponse,
@@ -11,30 +13,30 @@ export default async function migrationsApi(
   if (!databaseUrl) {
     return response.status(500).json({ error: "DATABASE_URL não está definida" });
   }
-  console.log(request.method)
+  const defaultMigrationsOptions = {
+    databaseUrl,
+    dryRun: true,
+    dir: join("infra", "migrations"),
+    direction: "up" as MigrationDirection,
+    verbose: true,
+    migrationsTable:"pgmigrations"
+  }
   if(request.method === "GET"){
-    const migrations = await migrationRunner({
-      databaseUrl,
-      dryRun: true,
-      dir: join("infra", "migrations"),
-      direction: "up",
-      verbose: true,
-      migrationsTable:"pgmigrations"
-    });
+    const pendingMigrations = await migrationRunner(defaultMigrationsOptions);
   
-    response.status(200).json(migrations);
+    response.status(200).json(pendingMigrations);
   }
   if(request.method === "POST"){
-    const migrations = await migrationRunner({
-      databaseUrl,
+    const migratedMigrations= await migrationRunner({
+      ...defaultMigrationsOptions,
       dryRun: false,
-      dir: join("infra", "migrations"),
-      direction: "up",
-      verbose: true,
-      migrationsTable:"pgmigrations"
     });
+
+    if(migratedMigrations.length > 0){
+      response.status(201).json(migratedMigrations);
+    }
   
-    response.status(200).json(migrations);
+    response.status(200).json(migratedMigrations);
   }
   return response.status(405).end()
 }
