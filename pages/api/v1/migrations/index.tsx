@@ -9,10 +9,6 @@ export default async function migrationsApi(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
-  const databaseUrl = process.env.DATABASE_URL;
-  if (!databaseUrl) {
-    return response.status(500).json({ error: "DATABASE_URL não está definida" });
-  }
 
   const dbClient = await database.getNewClient();
   const defaultMigrationsOptions = {
